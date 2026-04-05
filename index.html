@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0F6E56" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="AttendTrack" />
+  <title>AttendTrack</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+
+<div id="loader">
+  <div class="logo-mark" style="margin-bottom:0">
+    <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="19" cy="11" r="5" fill="white"/>
+      <path d="M7 30c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="29" cy="28" r="6" fill="#0F6E56" stroke="white" stroke-width="2"/>
+      <path d="M26.5 28l2 2 3.5-3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="spin"></div>
+</div>
+
+<div id="toast"></div>
+<div id="app">
+
+<!-- ═══════════════════════════════════════════ SPLASH ═══ -->
+<div class="screen" id="s-splash">
+  <div class="splash">
+    <div class="logo-mark">
+      <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="19" cy="11" r="5" fill="white"/>
+        <path d="M7 30c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="29" cy="28" r="6" fill="#0F6E56" stroke="white" stroke-width="2"/>
+        <path d="M26.5 28l2 2 3.5-3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-name">AttendTrack</div>
+    <div class="logo-sub">Attendance management for field teams — cleaning, pest control, hospitality & more</div>
+    <div class="role-grid">
+      <div class="role-card" onclick="demoLogin('staff')">
+        <div class="ri">&#128100;</div>
+        <div class="rn">Staff</div>
+        <div class="rd">Clock in/out</div>
+      </div>
+      <div class="role-card" onclick="demoLogin('supervisor')">
+        <div class="ri">&#128101;</div>
+        <div class="rn">Supervisor</div>
+        <div class="rd">Manage team</div>
+      </div>
+      <div class="role-card" onclick="demoLogin('admin')">
+        <div class="ri">&#9881;&#65039;</div>
+        <div class="rn">Admin</div>
+        <div class="rd">Full access</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--text-3);text-align:center;line-height:1.6">
+      Tap a role to sign in &nbsp;·&nbsp; Demo mode (no PIN required)<br>
+      <span style="color:var(--text-2)">Staff PIN: <strong>1234</strong> &nbsp;·&nbsp; Supervisor: <strong>0000</strong> &nbsp;·&nbsp; Admin: <strong>9999</strong></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ LOGIN ═══ -->
+<div class="screen" id="s-login">
+  <div class="login-wrap">
+    <div class="login-top" style="background:var(--teal)">
+      <div class="lt-mark">
+        <svg viewBox="0 0 38 38" fill="none" width="26" height="26">
+          <circle cx="19" cy="11" r="5" fill="white"/>
+          <path d="M7 30c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2>Sign in</h2>
+      <p id="login-role-hint">Enter your PIN</p>
+    </div>
+    <input type="hidden" id="login-role-hidden" value="staff" />
+    <div class="login-body">
+      <div style="display:flex;justify-content:center;gap:20px;margin-bottom:28px;margin-top:8px">
+        <span id="pin-dot-0" style="font-size:28px;color:var(--teal)">○</span>
+        <span id="pin-dot-1" style="font-size:28px;color:var(--teal)">○</span>
+        <span id="pin-dot-2" style="font-size:28px;color:var(--teal)">○</span>
+        <span id="pin-dot-3" style="font-size:28px;color:var(--teal)">○</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:260px;margin:0 auto">
+        <button class="btn btn-sec" style="font-size:22px;padding:16px" onclick="pinKey('1')">1</button>
+        <button class="btn btn-sec" style="font-size:22px;padding:16px" onclick="pinKey('2')">2</button>
+        <button class="btn btn-sec" style="font-size:22px;padding:16px" onclick="pinKey('3')">3</button>
+        <button class="btn btn-sec" style="font-size:22px;padding:16px" onclick="pinKey('4')">4</button>
+        <button class="btn btn-sec" style="font-size:22px;padding:16px" onclick="pinKey('5')">5</button>
+        <button class="btn btn-sec" style="font-size:22px;padding:16px" onclick="pinKey('6')">6</button>
+        <button class="btn btn-sec" style="font-size:22px;padding:16px" onclick="pinKey('7')">7</button>
+        <button class="btn btn-sec" style="font-size:22px;padding:16px" onclick="pinKey('8')">8</button>
+        <button class="btn btn-sec" style="font-size:22px;padding:16px" onclick="pinKey('9')">9</button>
+        <button class="btn btn-sec" style="font-size:16px;padding:16px" onclick="loginBack()">&#8592;</button>
+        <button class="btn btn-sec" style="font-size:22px;padding:16px" onclick="pinKey('0')">0</button>
+        <button class="btn btn-sec" style="font-size:18px;padding:16px" onclick="pinDelete()">&#9003;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ STAFF: HOME ═══ -->
+<div class="screen" id="s-staff-home">
+  <div class="hdr teal">
+    <div class="hdr-row">
+      <div>
+        <h2 id="staff-greeting">Good morning</h2>
+        <p id="staff-site-sub">Staff</p>
+      </div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="big-clock">
+      <div class="ct" id="staff-clock">--:--</div>
+      <div class="cd" id="staff-date"></div>
+    </div>
+    <div class="geo-pill in" id="geo-pill">
+      <div class="geo-dot in"></div>
+      <span>Checking location...</span>
+    </div>
+    <div id="staff-action-area"></div>
+    <hr class="divider" style="margin-top:14px" />
+    <div class="sect">Today</div>
+    <div class="card" style="padding:10px 14px">
+      <div class="row"><span class="lbl">Assigned site</span><span class="val" id="s-assigned-site">—</span></div>
+      <div class="row"><span class="lbl">Shift</span><span class="val">09:00 – 17:00</span></div>
+      <div class="row"><span class="lbl">Hours logged today</span><span class="val" id="s-hours-today">0h 0m</span></div>
+      <div class="row" style="border:none"><span class="lbl">Status</span><span id="s-status-badge"></span></div>
+    </div>
+  </div>
+  <div class="nav" id="staff-nav">
+    <div class="nav-item on-t" onclick="staffNav('home')"><span class="ni">&#8962;</span>Home</div>
+    <div class="nav-item" onclick="staffNav('history')"><span class="ni">&#128203;</span>History</div>
+    <div class="nav-item" onclick="staffNav('profile')"><span class="ni">&#128100;</span>Profile</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ STAFF: CONFIRM ═══ -->
+<div class="screen" id="s-staff-confirm">
+  <div class="hdr teal" id="confirm-hdr">
+    <h2 id="confirm-title">Confirm clock in</h2>
+    <p id="confirm-site-line">—</p>
+  </div>
+  <div class="body">
+    <div id="confirm-warn"></div>
+    <div class="confirm-detail">
+      <div class="row"><span class="lbl">Time</span><span class="val" id="confirm-time-val">—</span></div>
+      <div class="row"><span class="lbl">Site</span><span class="val" id="confirm-site-val">—</span></div>
+      <div class="row"><span class="lbl">Location</span><span id="confirm-geo-val">—</span></div>
+      <div class="row" style="border:none"><span class="lbl">Method</span><span class="val" id="confirm-method-val">—</span></div>
+    </div>
+    <div class="field">
+      <label>Note (optional)</label>
+      <input class="inp" id="confirm-note-in" placeholder="e.g. Traffic delay, early start..." />
+    </div>
+    <button class="btn btn-in" id="confirm-btn">Confirm clock in</button>
+    <button class="btn btn-sec" onclick="staffCancelConfirm()">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ STAFF: HISTORY ═══ -->
+<div class="screen" id="s-staff-history">
+  <div class="hdr teal">
+    <h2>My attendance</h2>
+    <p id="hist-period">—</p>
+  </div>
+  <div class="body">
+    <div class="stat-grid c2">
+      <div class="stat"><div class="sv" id="hist-days">0</div><div class="sl">Days present</div></div>
+      <div class="stat"><div class="sv" id="hist-hours">0h</div><div class="sl">Total hours</div></div>
+    </div>
+    <div class="sect">Records</div>
+    <div id="hist-list"></div>
+  </div>
+  <div class="nav" id="staff-nav">
+    <div class="nav-item" onclick="staffNav('home')"><span class="ni">&#8962;</span>Home</div>
+    <div class="nav-item on-t" onclick="staffNav('history')"><span class="ni">&#128203;</span>History</div>
+    <div class="nav-item" onclick="staffNav('profile')"><span class="ni">&#128100;</span>Profile</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ STAFF: PROFILE ═══ -->
+<div class="screen" id="s-staff-profile">
+  <div class="hdr teal">
+    <h2>My profile</h2>
+    <p>Account details</p>
+  </div>
+  <div class="body">
+    <div style="text-align:center;padding:20px 0 14px">
+      <div class="profile-avatar-big av-teal" id="p-avatar-wrap" style="width:64px;height:64px;font-size:20px;margin:0 auto 10px">
+        <span id="p-avatar-txt">AK</span>
+      </div>
+      <div style="font-size:18px;font-weight:600;color:var(--text)" id="p-name">—</div>
+      <div style="font-size:13px;color:var(--text-2);margin-top:3px" id="p-role-line">—</div>
+    </div>
+    <div class="card" style="padding:10px 14px">
+      <div class="row"><span class="lbl">Employee ID</span><span class="val" id="p-id">—</span></div>
+      <div class="row"><span class="lbl">Department</span><span class="val" id="p-dept">—</span></div>
+      <div class="row" style="border:none"><span class="lbl">Primary site</span><span class="val" id="p-site-val">—</span></div>
+    </div>
+    <button class="btn btn-sec" onclick="staffChangePin()">Change PIN</button>
+    <button class="btn btn-sec" onclick="logout()" style="margin-top:8px;color:#791F1F;border-color:var(--red-light)">Sign out</button>
+  </div>
+  <div class="nav" id="staff-nav">
+    <div class="nav-item" onclick="staffNav('home')"><span class="ni">&#8962;</span>Home</div>
+    <div class="nav-item" onclick="staffNav('history')"><span class="ni">&#128203;</span>History</div>
+    <div class="nav-item on-t" onclick="staffNav('profile')"><span class="ni">&#128100;</span>Profile</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SUPERVISOR: HOME ═══ -->
+<div class="screen" id="s-sup-home">
+  <div class="hdr purple">
+    <h2 id="sup-greeting">Good morning</h2>
+    <p id="sup-site-sub">Supervisor</p>
+  </div>
+  <div class="body">
+    <div class="stat-grid c3">
+      <div class="stat"><div class="sv" style="color:#1D9E75" id="sup-stat-present">0</div><div class="sl">Present</div></div>
+      <div class="stat"><div class="sv" style="color:#BA7517" id="sup-stat-pending">0</div><div class="sl">Pending</div></div>
+      <div class="stat"><div class="sv" style="color:#E24B4A" id="sup-stat-alerts">0</div><div class="sl">Alerts</div></div>
+    </div>
+    <div class="sect">Your status</div>
+    <div id="sup-own-status"></div>
+    <div class="sect">Needs attention</div>
+    <div id="sup-alerts-home"></div>
+  </div>
+  <div class="nav" id="sup-nav">
+    <div class="nav-item on-p" onclick="supNav('home')"><span class="ni">&#8962;</span>Home</div>
+    <div class="nav-item" onclick="supNav('team')"><span class="ni">&#128101;</span>Team</div>
+    <div class="nav-item" onclick="supNav('alerts')"><span class="ni">&#128276;</span>Alerts</div>
+    <div class="nav-item" onclick="supNav('report')"><span class="ni">&#128202;</span>Report</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SUPERVISOR: TEAM ═══ -->
+<div class="screen" id="s-sup-team">
+  <div class="hdr purple">
+    <h2>My team</h2>
+    <p id="sup-team-sub">—</p>
+  </div>
+  <div class="body" id="sup-team-list"></div>
+  <div class="nav" id="sup-nav">
+    <div class="nav-item" onclick="supNav('home')"><span class="ni">&#8962;</span>Home</div>
+    <div class="nav-item on-p" onclick="supNav('team')"><span class="ni">&#128101;</span>Team</div>
+    <div class="nav-item" onclick="supNav('alerts')"><span class="ni">&#128276;</span>Alerts</div>
+    <div class="nav-item" onclick="supNav('report')"><span class="ni">&#128202;</span>Report</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SUPERVISOR: ALERTS ═══ -->
+<div class="screen" id="s-sup-alerts">
+  <div class="hdr purple">
+    <h2>Alerts</h2>
+    <p id="sup-alerts-sub">—</p>
+  </div>
+  <div class="body" id="sup-alerts-body"></div>
+  <div class="nav" id="sup-nav">
+    <div class="nav-item" onclick="supNav('home')"><span class="ni">&#8962;</span>Home</div>
+    <div class="nav-item" onclick="supNav('team')"><span class="ni">&#128101;</span>Team</div>
+    <div class="nav-item on-p" onclick="supNav('alerts')"><span class="ni">&#128276;</span>Alerts</div>
+    <div class="nav-item" onclick="supNav('report')"><span class="ni">&#128202;</span>Report</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SUPERVISOR: OVERRIDE ═══ -->
+<div class="screen" id="s-sup-override">
+  <div class="hdr purple">
+    <h2>Manual clock-in</h2>
+    <p>Override entry for staff</p>
+  </div>
+  <div class="body">
+    <div class="info-box warn">&#9888; This entry will be flagged for admin review and approval.</div>
+    <div class="field">
+      <label>Employee</label>
+      <select class="sel" id="override-emp-sel"></select>
+    </div>
+    <div class="field">
+      <label>Clock-in time</label>
+      <input class="inp" type="time" id="override-time-inp" />
+    </div>
+    <div class="field">
+      <label>Reason</label>
+      <select class="sel" id="override-reason-sel">
+        <option>Phone battery died</option>
+        <option>GPS not working</option>
+        <option>Staff forgot to clock in</option>
+        <option>Late arrival — authorised</option>
+        <option>Technical issue with app</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Additional note (optional)</label>
+      <input class="inp" id="override-note-inp" placeholder="Add context for admin..." />
+    </div>
+    <button class="btn btn-purple" onclick="submitOverride()">Submit override</button>
+    <button class="btn btn-sec" onclick="supNav('alerts')">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SUPERVISOR: REPORT ═══ -->
+<div class="screen" id="s-sup-report">
+  <div class="hdr purple">
+    <h2>Site report</h2>
+    <p id="sup-report-sub">Today</p>
+  </div>
+  <div class="body">
+    <div class="stat-grid c3">
+      <div class="stat"><div class="sv" id="sup-r-scheduled">0</div><div class="sl">Scheduled</div></div>
+      <div class="stat"><div class="sv" style="color:#1D9E75" id="sup-r-present">0</div><div class="sl">Present</div></div>
+      <div class="stat"><div class="sv" style="color:#BA7517" id="sup-r-issues">0</div><div class="sl">Issues</div></div>
+    </div>
+    <div class="sect">Attendance log</div>
+    <div id="sup-report-tbl"></div>
+    <button class="btn btn-purple" onclick="supSendReport()">Send report to admin</button>
+  </div>
+  <div class="nav" id="sup-nav">
+    <div class="nav-item" onclick="supNav('home')"><span class="ni">&#8962;</span>Home</div>
+    <div class="nav-item" onclick="supNav('team')"><span class="ni">&#128101;</span>Team</div>
+    <div class="nav-item" onclick="supNav('alerts')"><span class="ni">&#128276;</span>Alerts</div>
+    <div class="nav-item on-p" onclick="supNav('report')"><span class="ni">&#128202;</span>Report</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ ADMIN: HOME ═══ -->
+<div class="screen" id="s-admin-home">
+  <div class="hdr dark">
+    <div class="hdr-row">
+      <div>
+        <h2>Admin dashboard</h2>
+        <p id="admin-date-sub">—</p>
+      </div>
+      <span class="hdr-badge">Admin</span>
+    </div>
+  </div>
+  <div class="body">
+    <div class="admin-stat-row">
+      <div class="admin-stat">
+        <div class="as-val" style="color:#1D9E75" id="adm-s1">0</div>
+        <div class="as-lbl">Clocked in now</div>
+        <div class="as-sub">across all sites</div>
+      </div>
+      <div class="admin-stat">
+        <div class="as-val" style="color:#E24B4A" id="adm-s2">0</div>
+        <div class="as-lbl">Pending review</div>
+        <div class="as-sub">manual entries</div>
+      </div>
+      <div class="admin-stat">
+        <div class="as-val" style="color:#BA7517" id="adm-s3">0</div>
+        <div class="as-lbl">Escalated</div>
+        <div class="as-sub">from supervisors</div>
+      </div>
+      <div class="admin-stat">
+        <div class="as-val" id="adm-s4">0</div>
+        <div class="as-lbl">Total staff</div>
+        <div class="as-sub">in system</div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn admin-tab on" onclick="setAdminTab('live')">Live</button>
+      <button class="tab-btn admin-tab" onclick="setAdminTab('employees')">Employees</button>
+      <button class="tab-btn admin-tab" onclick="setAdminTab('reports')">Reports</button>
+      <button class="tab-btn admin-tab" onclick="setAdminTab('sites')">Sites</button>
+    </div>
+    <div id="admin-tab-content"></div>
+    <button class="btn btn-sec" onclick="logout()" style="margin-top:12px;color:#791F1F">Sign out</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ IMPORT & SYNC ═══ -->
+<div class="screen" id="s-import">
+  <div class="hdr dark">
+    <div class="hdr-row">
+      <div><h2>Import &amp; sync</h2><p>Employee data management</p></div>
+      <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,0.7)">
+        <div class="pulse gray" id="import-sync-pulse" style="width:7px;height:7px;border-radius:50%;animation:none;background:#9A9A9A;flex-shrink:0"></div>
+        <span id="import-sync-label">Not connected</span>
+      </span>
+    </div>
+  </div>
+  <div class="body">
+    <div class="tab-bar">
+      <button class="tab-btn import-tab-btn on" onclick="importSwitchTab('api')">API sync</button>
+      <button class="tab-btn import-tab-btn" onclick="importSwitchTab('file')">File import</button>
+      <button class="tab-btn import-tab-btn" onclick="importSwitchTab('status')">Status</button>
+    </div>
+    <!-- API TAB -->
+    <div id="import-tab-api">
+      <div class="sect">Main application API</div>
+      <div class="card">
+        <div class="field"><label>API endpoint URL</label><input class="inp" id="api-url" style="font-family:var(--mono,monospace);font-size:12px" placeholder="https://your-main-app.com/api/employees"></div>
+        <div class="field"><label>API key (if required)</label><input class="inp" id="api-key" type="password" placeholder="Bearer token or API key"></div>
+        <div class="field"><label>Auto-sync frequency</label>
+          <select class="sel" id="api-freq">
+            <option value="0">Manual only</option>
+            <option value="15">Every 15 minutes</option>
+            <option value="30" selected>Every 30 minutes</option>
+            <option value="60">Every hour</option>
+            <option value="1440">Once per day</option>
+          </select>
+        </div>
+        <div class="field"><label>On conflict</label>
+          <select class="sel" id="api-conflict">
+            <option value="main">Main app wins (recommended)</option>
+            <option value="keep">Keep local, add new only</option>
+          </select>
+        </div>
+      </div>
+      <div class="sect">Field mapping</div>
+      <div class="card">
+        <div style="font-size:12px;color:var(--text-2);margin-bottom:10px">Map your main app field names to AttendTrack fields.</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span style="color:var(--text-2);width:100px;flex-shrink:0">Full name</span><span style="color:var(--text-3)">&#8592;</span><input class="inp" style="flex:1;padding:6px 10px;font-size:12px" value="full_name" id="map-name"></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span style="color:var(--text-2);width:100px;flex-shrink:0">Employee ID</span><span style="color:var(--text-3)">&#8592;</span><input class="inp" style="flex:1;padding:6px 10px;font-size:12px" value="employee_id" id="map-id"></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span style="color:var(--text-2);width:100px;flex-shrink:0">Department</span><span style="color:var(--text-3)">&#8592;</span><input class="inp" style="flex:1;padding:6px 10px;font-size:12px" value="department" id="map-dept"></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span style="color:var(--text-2);width:100px;flex-shrink:0">Site</span><span style="color:var(--text-3)">&#8592;</span><input class="inp" style="flex:1;padding:6px 10px;font-size:12px" value="work_location" id="map-site"></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span style="color:var(--text-2);width:100px;flex-shrink:0">Role</span><span style="color:var(--text-3)">&#8592;</span><input class="inp" style="flex:1;padding:6px 10px;font-size:12px" value="role" id="map-role"></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 0;font-size:12px"><span style="color:var(--text-2);width:100px;flex-shrink:0">PIN</span><span style="color:var(--text-3)">&#8592;</span><input class="inp" style="flex:1;padding:6px 10px;font-size:12px" value="pin" id="map-pin"></div>
+      </div>
+      <button class="btn btn-dark" onclick="saveApiConfig()">Save &amp; test connection</button>
+      <button class="btn btn-in" style="margin-top:8px" id="sync-now-btn" onclick="syncNow()">Sync now</button>
+      <div id="api-test-result" style="margin-top:10px"></div>
+    </div>
+    <!-- FILE TAB -->
+    <div id="import-tab-file" style="display:none">
+      <div class="info-box info">Supports <strong>CSV, Excel (.xlsx) and JSON</strong>. Use while your main API is being set up, or for bulk import.</div>
+      <div id="import-drop-zone"
+        onclick="document.getElementById('import-file-input').click()"
+        ondragover="event.preventDefault();this.style.borderColor='var(--teal)'"
+        ondragleave="this.style.borderColor=''"
+        ondrop="handleImportDrop(event)"
+        style="border:2px dashed var(--border-md);border-radius:var(--r-lg);padding:28px 20px;text-align:center;cursor:pointer;background:var(--bg);margin-bottom:14px">
+        <div style="font-size:32px;margin-bottom:8px">&#128196;</div>
+        <div style="font-size:13px;font-weight:500;color:var(--text)">Tap to choose file or drag &amp; drop</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:4px">CSV &nbsp;&#183;&nbsp; Excel (.xlsx) &nbsp;&#183;&nbsp; JSON</div>
+      </div>
+      <input type="file" id="import-file-input" accept=".csv,.xlsx,.json" style="display:none" onchange="handleImportFileSelect(event)">
+      <div id="import-file-preview" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Preview</span>
+          <span class="badge b-blue" id="import-preview-count">0 employees</span>
+        </div>
+        <div id="import-preview-warn"></div>
+        <div class="tbl-wrap" id="import-preview-tbl" style="margin-bottom:10px"></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-in" style="flex:1" onclick="doImportEmployees()">Import all</button>
+          <button class="btn btn-sec" style="flex:1" onclick="cancelImportFile()">Cancel</button>
+        </div>
+      </div>
+      <hr style="border:none;border-top:0.5px solid var(--border);margin:14px 0">
+      <div class="sect">Download template</div>
+      <div class="card" style="padding:12px 14px">
+        <div style="font-size:12px;color:var(--text-2);margin-bottom:10px">Download a blank template to fill in and import.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-xs bx-teal" onclick="downloadTemplate('csv')">&#8595; CSV template</button>
+          <button class="btn-xs bx-teal" onclick="downloadTemplate('json')">&#8595; JSON template</button>
+        </div>
+      </div>
+    </div>
+    <!-- STATUS TAB -->
+    <div id="import-tab-status" style="display:none">
+      <div class="sect">Sync status</div>
+      <div class="card" style="padding:10px 14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span style="font-size:12px;color:var(--text-2)">API connection</span><div style="display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:#9A9A9A" id="import-st-api-dot"></div><span class="badge b-gray" id="import-st-api-badge">Not configured</span></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span style="font-size:12px;color:var(--text-2)">Last sync</span><span style="font-size:12px;font-weight:500;color:var(--text)" id="import-st-last-sync">Never</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span style="font-size:12px;color:var(--text-2)">Next sync</span><span style="font-size:12px;font-weight:500;color:var(--text)" id="import-st-next-sync">Manual only</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--border)"><span style="font-size:12px;color:var(--text-2)">Employees in system</span><span style="font-size:12px;font-weight:500;color:var(--text)" id="import-st-emp-count">—</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0"><span style="font-size:12px;color:var(--text-2)">Last import method</span><span style="font-size:12px;font-weight:500;color:var(--text)" id="import-st-last-method">—</span></div>
+      </div>
+      <div class="sect">Employee list</div>
+      <div class="tbl-wrap" id="import-emp-list-tbl"></div>
+      <div class="sect">Sync log</div>
+      <div class="card" style="padding:10px 12px">
+        <div id="import-sync-log" style="font-size:11px;color:var(--text-2);font-family:monospace;line-height:1.8">No activity yet.</div>
+      </div>
+      <button class="btn btn-sec" onclick="clearAllImportedEmployees()" style="margin-top:8px;color:#791F1F">Clear all employees</button>
+    </div>
+  </div>
+  <div class="nav">
+    <div class="nav-item on-d" onclick="showScreen('s-admin-home');renderAdminHome()"><span class="ni">&#8592;</span>Back</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ADMIN: ADD EMPLOYEE ═══ -->
+<div class="screen" id="s-admin-add-emp">
+  <div class="hdr dark">
+    <h2>Add employee</h2>
+    <p>Create a new account</p>
+  </div>
+  <div class="body">
+    <div class="field">
+      <label>Full name</label>
+      <input class="inp" id="new-emp-name" placeholder="e.g. Sara Mohammed" />
+    </div>
+    <div class="field">
+      <label>Department</label>
+      <select class="sel" id="new-emp-dept">
+        <option>Cleaning</option>
+        <option>Pest control</option>
+        <option>Hospitality</option>
+        <option>Disinfecting</option>
+        <option>Maintenance</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Primary site</label>
+      <select class="sel" id="new-emp-site"></select>
+    </div>
+    <div class="field">
+      <label>Role</label>
+      <select class="sel" id="new-emp-role">
+        <option value="staff">Staff</option>
+        <option value="supervisor">Supervisor</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Temporary PIN (4 digits)</label>
+      <input class="inp" id="new-emp-pin" type="number" placeholder="e.g. 1234" maxlength="4" />
+    </div>
+    <div class="info-box info">Share this PIN with the employee. They can change it after their first login.</div>
+    <button class="btn btn-dark" onclick="adminAddEmployee()">Create account</button>
+    <button class="btn btn-sec" onclick="showScreen('s-admin-home');setAdminTab('employees')">Cancel</button>
+  </div>
+</div>
+
+</div><!-- #app -->
+
+<script src="js/db.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/staff.js"></script>
+<script src="js/supervisor.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/import.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // Populate site dropdown when add-emp screen is shown
+  document.getElementById('s-admin-add-emp').addEventListener('click', populateAddEmpDropdowns, { once: false });
+  document.getElementById('s-import').addEventListener('click', ()=>{}, { once: false });
+</script>
+</body>
+</html>
